@@ -106,3 +106,5 @@ class BaseDescription:
     package: Dict[str, Any]
     sample: Any
     duplicates: Any
+    external_properties: Dict[str, Any]
+

@@ -1,0 +1,132 @@
+{
+  "flatSchema": [
+    {
+      "columnName": "id",
+      "columnType": "long"
+    },
+    {
+      "columnName": "name",
+      "columnType": "string"
+    },
+    {
+      "columnName": "firstName",
+      "columnType": "string"
+    },
+    {
+      "columnName": "lastName",
+      "columnType": "string"
+    },
+    {
+      "columnName": "jobTitle",
+      "columnType": "string"
+    },
+    {
+      "columnName": "ssn",
+      "columnType": "string"
+    },
+    {
+      "columnName": "dateOfBirth",
+      "columnType": "string"
+    },
+    {
+      "columnName": "hireDate",
+      "columnType": "string"
+    },
+    {
+      "columnName": "lastPromotionDate",
+      "columnType": "string"
+    },
+    {
+      "columnName": "country",
+      "columnType": "string"
+    },
+    {
+      "columnName": "state",
+      "columnType": "string"
+    },
+    {
+      "columnName": "city",
+      "columnType": "string"
+    },
+    {
+      "columnName": "zipcode",
+      "columnType": "string"
+    },
+    {
+      "columnName": "latitude",
+      "columnType": "float"
+    },
+    {
+      "columnName": "longitude",
+      "columnType": "float"
+    },
+    {
+      "columnName": "department",
+      "columnType": "string"
+    },
+    {
+      "columnName": "technology",
+      "columnType": "string"
+    },
+    {
+      "columnName": "email",
+      "columnType": "string"
+    },
+    {
+      "columnName": "websiteUrl",
+      "columnType": "string"
+    },
+    {
+      "columnName": "sport",
+      "columnType": "string"
+    },
+    {
+      "columnName": "uuid",
+      "columnType": "string"
+    },
+    {
+      "columnName": "salary",
+      "columnType": "float"
+    },
+    {
+      "columnName": "sales",
+      "columnType": "float"
+    },
+    {
+      "columnName": "netWorth",
+      "columnType": "float"
+    },
+    {
+      "columnName": "yearsExperience",
+      "columnType": "long"
+    },
+    {
+      "columnName": "performanceRating",
+      "columnType": "float"
+    },
+    {
+      "columnName": "bonusPercentage",
+      "columnType": "float"
+    },
+    {
+      "columnName": "height",
+      "columnType": "float"
+    },
+    {
+      "columnName": "weight",
+      "columnType": "float"
+    },
+    {
+      "columnName": "isActive",
+      "columnType": "long"
+    },
+    {
+      "columnName": "isRemote",
+      "columnType": "long"
+    },
+    {
+      "columnName": "additionalData",
+      "columnType": "string"
+    }
+  ]
+}

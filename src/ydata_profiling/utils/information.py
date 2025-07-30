@@ -5,7 +5,7 @@ import importlib.util
 import os
 
 _displayed_banner = False
-SUPPRESS_BANNER = bool(os.getenv("YDATA_SUPPRESS_BANNER", ""))
+SUPPRESS_BANNER = True ##bool(os.getenv("YDATA_SUPPRESS_BANNER", ""))
 
 link = "https://ydata.ai/register"
 title = "Upgrade to ydata-sdk"

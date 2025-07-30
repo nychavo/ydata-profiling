@@ -251,3 +251,55 @@ span[data-bs-toggle="tooltip"] {
     background: var(--bs-secondary-bg-subtle);
     color: var(--bs-secondary-text-emphasis);
 }
+
+
+
+/* Card styling */
+.card-wrapper {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+    background-color: #ffffff;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    overflow: hidden;
+}
+
+.card-wrapper:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.16);
+    transform: translateY(-1px);
+}
+
+.accordion-button {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 1rem 1.5rem; /* increase left padding to avoid text crowding the new border */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+
+.accordion-button:not(.collapsed) {
+    background-color: #e9ecef;
+    color: #0d6efd;
+}
+
+/* Add padding inside the body */
+.accordion-body {
+    padding: 1.7rem 2.2rem;
+}
+
+.accordion-header {
+    border-left: 3px solid var(--bs-primary);
+    border-top-left-radius: 8px;
+}
+
+
+/* Fix chevron */
+.accordion-button::after {
+    transition: transform 0.2s ease-in-out;
+}
+
+.accordion-button:not(.collapsed)::after {
+    transform: rotate(-180deg);
+}

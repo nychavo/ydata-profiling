@@ -30,7 +30,7 @@ def get_dataset_overview(config: Settings, summary: BaseDescription) -> Renderab
             "value": fmt_number(summary.table["n_var"]),
         },
         {
-            "name": "Number of observations",
+            "name": "Number of observations (rows)",
             "value": fmt_number(summary.table["n"]),
         },
         {
@@ -88,7 +88,7 @@ def get_dataset_overview(config: Settings, summary: BaseDescription) -> Renderab
     return Container(
         [dataset_info, dataset_types],
         anchor_id="dataset_overview",
-        name="Overview",
+        name="Summary",
         sequence_type="grid",
     )
 
@@ -161,7 +161,8 @@ def get_dataset_reproduction(config: Settings, summary: BaseDescription) -> Rend
 
     @list_args
     def fmt_version(version: str) -> str:
-        return f'<a href="https://github.com/ydataai/ydata-profiling">ydata-profiling v{version}</a>'
+        # return f'<a href="https://github.com/ydataai/ydata-profiling">ydata-profiling v{version}</a>'
+        return f'DataPulse integration version: {version}'
 
     @list_args
     def fmt_config(config: str) -> str:
@@ -184,6 +185,59 @@ def get_dataset_reproduction(config: Settings, summary: BaseDescription) -> Rend
         [reproduction_table],
         name="Reproduction",
         anchor_id="reproduction",
+        sequence_type="grid",
+    )
+
+
+def get_dataset_data_schema(config: Settings, summary: BaseDescription) -> Renderable:
+    """Dataset schema part of the report
+
+    Args:
+        config: settings object
+        summary: the dataset summary.
+
+    Returns:
+        A renderable object
+    """
+
+    version = summary.package["ydata_profiling_version"]
+    config_file = summary.package["ydata_profiling_config"]
+    date_start = summary.analysis.date_start
+    date_end = summary.analysis.date_end
+    duration = summary.analysis.duration
+
+    @list_args
+    def fmt_version(version: str) -> str:
+        # return f'<a href="https://github.com/ydataai/ydata-profiling">ydata-profiling v{version}</a>'
+        return f'DataPulse integration version: {version}'
+
+    @list_args
+    def fmt_config(config: str) -> str:
+        return f'<a download="config.json" href="data:text/plain;charset=utf-8,{quote(config)}">config.json</a>'
+
+
+    flat_schema = summary.external_properties.get("flatSchema", None)
+    if flat_schema is not None:
+        converted_schema = [{'name': item['columnName'], 'value': item['columnType']} for item in flat_schema]
+        reproduction_table = Table(
+            converted_schema,
+            name="Schema",
+            anchor_id="overview_schema",
+            style=config.html.style,
+        )
+    else:
+        reproduction_table = Table(
+            [
+                {"name": "Missing Table Schema", "value": "N/A"}
+            ],
+            name="Schema",
+            anchor_id="overview_schema",
+            style=config.html.style,
+        )
+    return Container(
+        [reproduction_table],
+        name="Schema",
+        anchor_id="schema",
         sequence_type="grid",
     )
 
@@ -361,6 +415,9 @@ def get_dataset_items(config: Settings, summary: BaseDescription, alerts: list) 
         key: config.variables.descriptions[key]
         for key in config.variables.descriptions.keys()
     }
+
+    if summary.external_properties.get("flatSchema", None):
+        items.append(get_dataset_data_schema(config, summary))
 
     if len(column_details) > 0:
         items.append(get_dataset_column_definitions(config, column_details))

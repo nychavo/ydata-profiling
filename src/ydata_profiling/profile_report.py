@@ -68,6 +68,7 @@ class ProfileReport(SerializeReport, ExpectationsReport):
     def __init__(
         self,
         df: Optional[Union[pd.DataFrame, sDataFrame]] = None,
+        external_properties: Optional[dict] = None,
         minimal: bool = False,
         tsmode: bool = False,
         sortby: Optional[str] = None,
@@ -149,6 +150,7 @@ class ProfileReport(SerializeReport, ExpectationsReport):
             report_config.vars.timeseries.sortby = sortby
 
         self.df = self.__initialize_dataframe(df, report_config)
+        self.external_properties = external_properties
         self.config = report_config
         self._df_hash = None
         self._sample = sample
@@ -273,6 +275,7 @@ class ProfileReport(SerializeReport, ExpectationsReport):
                 self.summarizer,
                 self.typeset,
                 self._sample,
+                external_properties=self.external_properties,
             )
         return self._description_set
 

@@ -33,6 +33,7 @@ def describe(
     summarizer: BaseSummarizer,
     typeset: VisionsTypeset,
     sample: Optional[dict] = None,
+    external_properties: Optional[dict] = None,
 ) -> BaseDescription:  # noqa: TC301
     """Calculate the statistics for each series in this DataFrame.
 
@@ -206,5 +207,6 @@ def describe(
         package=package,
         sample=samples,
         duplicates=duplicates,
+        external_properties=external_properties,
     )
     return description
