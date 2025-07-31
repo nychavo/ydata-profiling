@@ -1,6 +1,7 @@
 import os
-import tempfile
+import tempfile, random, string
 from copy import deepcopy
+import numpy as np
 
 import pandas as pd
 import seaborn as sns
@@ -54,8 +55,14 @@ class DemoYData:
         ext_properties2['flatSchema'].pop()
 
         profile1 = ProfileReport(df1, title="Titanic Original", explorative=True, external_properties=ext_properties)
-        profile2 = ProfileReport(df2, title="Titanic Modified", explorative=True, external_properties=ext_properties2)
+        profile2 = ProfileReport(df2, title="Titanic Modified", explorative=True)
+        # profile2 = ProfileReport(df2, title="Titanic Modified", explorative=True, external_properties=ext_properties2)
         return profile1, profile2
+
+    # Function to generate a random 8-character string
+    @staticmethod
+    def generate_random_string(length=8):
+        return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
     @staticmethod
     def compare_profiles(profile1: ProfileReport, profile2: ProfileReport):
@@ -72,6 +79,11 @@ def main():
     demo = DemoYData()
     df1 = demo.load_sample_data()
     df2 = demo.modify_data(df1)
+    df1["password"] = [demo.generate_random_string() for _ in range(len(df1))]
+    df2["password"] = [demo.generate_random_string() for _ in range(len(df2))]
+    df1.loc[:199, "password"] = "password"
+    df2.loc[df2.index[-30:], "password"] = np.nan
+
     profile1, profile2 = demo.generate_profiles(df1, df2)
     comparison = demo.compare_profiles(profile1, profile2)
     result_path = demo.save_comparison_to_temp_html(comparison)

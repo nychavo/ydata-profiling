@@ -202,49 +202,58 @@ def get_dataset_data_schema(config: Settings, summary: BaseDescription) -> Rende
 
     flat_schema = summary.external_properties.get("flatSchema", None)
 
-    def to_renderable_schema(schema_list, title, anchor_suffix):
-        converted = [{'name': item['columnName'], 'value': item['columnType']} for item in schema_list]
-        return Table(
-            converted,
-            name=title,
-            anchor_id=f"overview_schema_{anchor_suffix}",
-            style=config.html.style,
-        )
+    table_metrics = []
 
     if flat_schema is not None:
-        tables = []
-
-        # Case 1: Tuple of original/transformed schemas
+        # Case 1: Tuple of original and transformed schemas
         if isinstance(flat_schema, tuple) and len(flat_schema) == 2:
             original_schema, transformed_schema = flat_schema
 
-            tables.append(to_renderable_schema(original_schema, "Original Schema", "original"))
-            tables.append(to_renderable_schema(transformed_schema, "Transformed Schema", "transformed"))
+            # Build a merged map by column name
+            original_map = {col["columnName"]: col["columnType"] for col in original_schema}
+            transformed_map = {col["columnName"]: col["columnType"] for col in transformed_schema}
+
+            all_keys = sorted(set(original_map.keys()) | set(transformed_map.keys()))
+            for col in all_keys:
+                table_metrics.append({
+                    "name": col,
+                    "value": [
+                        original_map.get(col, "[NULL]"),
+                        transformed_map.get(col, "[NULL]")
+                    ]
+                })
 
         # Case 2: Single schema list
         elif isinstance(flat_schema, list):
-            tables.append(to_renderable_schema(flat_schema, "Schema", "single"))
+            for item in flat_schema:
+                table_metrics.append({
+                    "name": item["columnName"],
+                    "value": item["columnType"]
+                })
 
         else:
-            # Fallback for unexpected type
-            tables.append(Table(
-                [{"name": "Invalid schema format", "value": str(type(flat_schema))}],
-                name="Schema",
-                anchor_id="overview_schema_invalid",
-                style=config.html.style,
-            ))
-
+            # Invalid format
+            table_metrics.append({
+                "name": "Invalid Schema Format",
+                "value": str(type(flat_schema))
+            })
     else:
-        # Case 3: Schema is missing
-        tables = [Table(
-            [{"name": "Missing Table Schema", "value": "N/A"}],
-            name="Schema",
-            anchor_id="overview_schema_missing",
-            style=config.html.style,
-        )]
+        # Missing schema
+        table_metrics.append({
+            "name": "Missing Table Schema",
+            "value": "N/A"
+        })
+
+    # Create a single table object from the table_metrics
+    schema_table = Table(
+        table_metrics,
+        name="Schema",
+        anchor_id="overview_schema",
+        style=config.html.style,
+    )
 
     return Container(
-        tables,
+        [schema_table],
         name="Schema",
         anchor_id="schema",
         sequence_type="grid",
