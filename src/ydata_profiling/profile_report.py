@@ -68,7 +68,7 @@ class ProfileReport(SerializeReport, ExpectationsReport):
     def __init__(
         self,
         df: Optional[Union[pd.DataFrame, sDataFrame]] = None,
-        external_properties: Optional[dict] = None,
+        external_properties: Optional[dict] = {},
         minimal: bool = False,
         tsmode: bool = False,
         sortby: Optional[str] = None,

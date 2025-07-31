@@ -200,42 +200,51 @@ def get_dataset_data_schema(config: Settings, summary: BaseDescription) -> Rende
         A renderable object
     """
 
-    version = summary.package["ydata_profiling_version"]
-    config_file = summary.package["ydata_profiling_config"]
-    date_start = summary.analysis.date_start
-    date_end = summary.analysis.date_end
-    duration = summary.analysis.duration
-
-    @list_args
-    def fmt_version(version: str) -> str:
-        # return f'<a href="https://github.com/ydataai/ydata-profiling">ydata-profiling v{version}</a>'
-        return f'DataPulse integration version: {version}'
-
-    @list_args
-    def fmt_config(config: str) -> str:
-        return f'<a download="config.json" href="data:text/plain;charset=utf-8,{quote(config)}">config.json</a>'
-
-
     flat_schema = summary.external_properties.get("flatSchema", None)
+
+    def to_renderable_schema(schema_list, title, anchor_suffix):
+        converted = [{'name': item['columnName'], 'value': item['columnType']} for item in schema_list]
+        return Table(
+            converted,
+            name=title,
+            anchor_id=f"overview_schema_{anchor_suffix}",
+            style=config.html.style,
+        )
+
     if flat_schema is not None:
-        converted_schema = [{'name': item['columnName'], 'value': item['columnType']} for item in flat_schema]
-        reproduction_table = Table(
-            converted_schema,
-            name="Schema",
-            anchor_id="overview_schema",
-            style=config.html.style,
-        )
+        tables = []
+
+        # Case 1: Tuple of original/transformed schemas
+        if isinstance(flat_schema, tuple) and len(flat_schema) == 2:
+            original_schema, transformed_schema = flat_schema
+
+            tables.append(to_renderable_schema(original_schema, "Original Schema", "original"))
+            tables.append(to_renderable_schema(transformed_schema, "Transformed Schema", "transformed"))
+
+        # Case 2: Single schema list
+        elif isinstance(flat_schema, list):
+            tables.append(to_renderable_schema(flat_schema, "Schema", "single"))
+
+        else:
+            # Fallback for unexpected type
+            tables.append(Table(
+                [{"name": "Invalid schema format", "value": str(type(flat_schema))}],
+                name="Schema",
+                anchor_id="overview_schema_invalid",
+                style=config.html.style,
+            ))
+
     else:
-        reproduction_table = Table(
-            [
-                {"name": "Missing Table Schema", "value": "N/A"}
-            ],
+        # Case 3: Schema is missing
+        tables = [Table(
+            [{"name": "Missing Table Schema", "value": "N/A"}],
             name="Schema",
-            anchor_id="overview_schema",
+            anchor_id="overview_schema_missing",
             style=config.html.style,
-        )
+        )]
+
     return Container(
-        [reproduction_table],
+        tables,
         name="Schema",
         anchor_id="schema",
         sequence_type="grid",
