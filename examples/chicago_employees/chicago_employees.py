@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pandas as pd, json
-
+import pickle
 from ydata_profiling import ProfileReport
 from ydata_profiling.utils.cache import cache_file
 from ydata_profiling.config import Settings

@@ -108,8 +108,9 @@ class ProfileReport(SerializeReport, ExpectationsReport):
         """
 
         self.__validate_inputs(df, minimal, tsmode, config_file, lazy)
-
         self._df_type = type(df)
+
+        print(f"YData Custom Version: 2025.08.01")
 
         if config_file or minimal:
             if not config_file:

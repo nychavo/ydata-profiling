@@ -303,3 +303,13 @@ span[data-bs-toggle="tooltip"] {
 .accordion-button:not(.collapsed)::after {
     transform: rotate(-180deg);
 }
+
+.stylish-divider {
+    margin: 2rem auto;
+    width: 70%;
+    border: 0;
+    height: 2px;
+    background-color: #adb5bd;        /* Darker gray (Bootstrap gray-600) */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Slightly deeper shadow */
+    border-radius: 2px;
+}

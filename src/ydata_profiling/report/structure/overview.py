@@ -65,9 +65,20 @@ def get_dataset_overview(config: Settings, summary: BaseDescription) -> Renderab
                 {
                     "name": "Average record size in memory",
                     "value": fmt_bytesize(summary.table["record_size"]),
-                },
+                }
             ]
         )
+    if summary.external_properties:
+        execution_properties = summary.external_properties.get("executionProperties", None)
+        if execution_properties and isinstance(execution_properties, dict) and execution_properties.get('resultsTimestampStr', None):
+            table_metrics.extend(
+                [
+                    {
+                        "name": "Data as of",
+                        "value":  execution_properties.get('resultsTimestampStr', None),
+                    }
+                ]
+            )
 
     dataset_info = Table(
         table_metrics, name="Dataset statistics", style=config.html.style

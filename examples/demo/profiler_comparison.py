@@ -35,6 +35,16 @@ class DemoYData:
     @staticmethod
     def generate_profiles(df1: pd.DataFrame, df2: pd.DataFrame):
         ext_properties = {
+            "executionProperties": {
+                "sessionID": "841e382b-0610-43e1-9b3f-a1d4db4db11c",
+                "queryID": "ec5a7a6b-d305-4849-9dac-5457ea21f393",
+                "resultsTimestamp": 1754099916358,
+                "resultsTimestampStr": "2025-08-01 21:58:36",
+                "originalExecDuration": 1,
+                "user": "WILLIAM",
+                "originalQuery": "/* @DS{MANTIS_ACTIVITY} @DCS{30} } */ SELECT * from process_status",
+                "executedQuery": "SELECT * FROM ( /* @DS{MANTIS_ACTIVITY} @DCS{30} } @USER{WILLIAM} */ SELECT * from process_status ) AS QUERY_20250801215836 LIMIT 833334",
+            },
             "flatSchema": [
                 {
                     "columnName": "id",
@@ -51,12 +61,13 @@ class DemoYData:
             ]
         }
         ext_properties2 = deepcopy(ext_properties)
+        ext_properties2['executionProperties']['resultsTimestampStr'] = '2025-08-01 03:21:18'
         ext_properties2['flatSchema'][0]['columnType'] = 'string'
         ext_properties2['flatSchema'].pop()
 
         profile1 = ProfileReport(df1, title="Titanic Original", explorative=True, external_properties=ext_properties)
-        profile2 = ProfileReport(df2, title="Titanic Modified", explorative=True)
-        # profile2 = ProfileReport(df2, title="Titanic Modified", explorative=True, external_properties=ext_properties2)
+        # profile2 = ProfileReport(df2, title="Titanic Modified", explorative=True)
+        profile2 = ProfileReport(df2, title="Titanic Modified", explorative=True, external_properties=ext_properties2)
         return profile1, profile2
 
     # Function to generate a random 8-character string
