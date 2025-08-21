@@ -155,7 +155,7 @@ def render_variables_section(
                     # Treating numeric as categorical, if one is unsupported, still render as categorical
                     variable_type = "Categorical"
                 else:
-                    raise ValueError(f"Types for {idx} are not compatible: {types}")
+                    raise ValueError(f"Types for {idx} are not compatible: {types}") ##TODO handle scenario!! when categorical datatypes may be different between datasets
         else:
             variable_type = summary["type"]
         render_map_type = render_map.get(variable_type, render_map["Unsupported"])
